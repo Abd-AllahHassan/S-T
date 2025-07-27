@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Little Fashion - ملابس أطفال</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&display=swap');
+        
+        :root {
+            --primary-color: #FF9AA2;
+            --secondary-color: #FFB7B2;
+            --accent-color: #FFDAC1;
+            --dark-color: #E2F0CB;
+            --light-color: #B5EAD7;
+        }
+        
+        body {
+            font-family: 'Tajawal', sans-serif;
+            overflow-x: hidden;
+        }
+        
+        .en {
+            font-family: 'Montserrat', sans-serif;
+            direction: ltr;
+        }
+        
+        .loader {
+            width: 100px;
+            height: 100px;
+            perspective: 1000px;
+        }
+        
+        .loader-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+            animation: rotate 3s infinite linear;
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+        
+        .loader-front, .loader-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+        }
+        
+        .loader-back {
+            transform: rotateY(180deg);
+        }
+        
+        .product-card {
+            transition: all 0.3s ease;
+            transform: translateY(50px);
+            opacity: 0;
+        }
+        
+        .product-card.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.6s ease;
+        }
+        
+        .animate-on-scroll.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .cart-item {
+            animation: slideIn 0.5s ease forwards;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .checkout-form input, .checkout-form select {
+            transition: all 0.3s ease;
+        }
+        
+        .checkout-form input:focus, .checkout-form select:focus {
+            transform: scale(1.02);
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Loader -->
+    <div id="loader" class="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center">
+        <div class="loader mb-8">
+            <div class="loader-inner">
+                <div class="loader-front text-white font-bold text-xl">Little Fashion</div>
+                <div class="loader-back text-white font-bold text-xl">أزياء أطفال</div>
+            </div>
+        </div>
+        <p class="text-gray-600 mt-4">جاري التحميل...</p>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-pink-200 to-blue-200 py-6 shadow-lg animate-on-scroll">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <img src="./ST-REBRANDINGx.png" alt="logo" width="50px" height="50px">
+            <nav>
+                <ul class="flex space-x-6 space-x-reverse">
+                    <li><a href="#home" class="text-gray-800 hover:text-pink-600 transition" data-ar="الرئيسية" data-en="Home">الرئيسية</a></li>
+                    <li><a href="#products" class="text-gray-800 hover:text-pink-600 transition" data-ar="المنتجات" data-en="Products">المنتجات</a></li>
+                    <li><a href="#about" class="text-gray-800 hover:text-pink-600 transition" data-ar="من نحن" data-en="About">من نحن</a></li>
+                    <li><a href="#contact" class="text-gray-800 hover:text-pink-600 transition" data-ar="اتصل بنا" data-en="Contact">اتصل بنا</a></li>
+                </ul>
+            </nav>
+            <div class="flex items-center space-x-4 space-x-reverse">
+                <button id="languageSwitcher" class="bg-white shadow-md rounded-full px-4 py-2 flex items-center">
+                    <span class="language-text">English</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+                    </svg>
+                </button>
+                <div class="relative">
+                    <button id="cartButton" class="text-gray-800 hover:text-pink-600 transition relative">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                        </svg>
+                        <span id="cartCount" class="absolute -top-2 -right-2 bg-pink-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="py-20 bg-gradient-to-r from-pink-100 to-blue-100 animate-on-scroll">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 mb-10 md:mb-0">
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-6" data-ar="أزياء مريحة وعصرية لأطفالك" data-en="Comfortable and stylish fashion for your kids">أزياء مريحة وعصرية لأطفالك</h2>
+                <p class="text-lg text-gray-600 mb-8" data-ar="اكتشف مجموعتنا الفريدة من الملابس المصممة خصيصًا لراحة أطفالك وأناقتهم" data-en="Discover our unique collection of clothes specially designed for your children's comfort and style">اكتشف مجموعتنا الفريدة من الملابس المصممة خصيصًا لراحة أطفالك وأناقتهم</p>
+                <a href="#products" class="bg-pink-600 hover:bg-pink-700 text-white px-6 py-3 rounded-full font-medium transition duration-300 inline-block" data-ar="تصفح المنتجات" data-en="Browse Products">تصفح المنتجات</a>
+            </div>
+            <div class="md:w-1/2">
+                <img src="./hero.jpg" alt="Kids Fashion" class="rounded-lg shadow-xl w-full max-w-md mx-auto transform hover:scale-105 transition duration-500">
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12 animate-on-scroll" data-ar="منتجاتنا" data-en="Our Products">منتجاتنا</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Product 1 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl">
+                    <div class="relative overflow-hidden">
+                        <img src="./product1.jpg" alt="طقم جيب شورت اطفال" class="w-full h-64 object-cover transition duration-500 hover:scale-110">
+                        <div class="absolute top-4 right-4 bg-pink-600 text-white px-3 py-1 rounded-full text-sm font-medium">جديد</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2" data-ar="طقم جيب شورت اطفال - بستاشيو" data-en="Kids Pocket Shorts Set - Pistachio">طقم جيب شورت اطفال - بستاشيو</h3>
+                        <p class="text-gray-600 mb-4" data-ar="طقم مكون من 3 قطع: تيشرت، شورت، وكاب" data-en="3-piece set: T-shirt, shorts, and cap">طقم مكون من 3 قطع: تيشرت، شورت، وكاب</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-pink-600">250 ج.م</span>
+                            <button class="view-details bg-blue-100 text-blue-800 px-4 py-2 rounded-full font-medium hover:bg-blue-200 transition" data-product="1" data-ar="عرض التفاصيل" data-en="View Details">عرض التفاصيل</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 2 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl">
+                    <div class="relative overflow-hidden">
+                        <img src="./product2.jpg" alt="طقم جيب شورت اطفال" class="w-full h-64 object-cover transition duration-500 hover:scale-110">
+                        <div class="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">جديد</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">طقم جيب شورت اطفال - بيبي بلو</h3>
+                        <p class="text-gray-600 mb-4">طقم مكون من 3 قطع: تيشرت، شورت، وكاب</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-pink-600">250 ج.م</span>
+                            <button class="view-details bg-blue-100 text-blue-800 px-4 py-2 rounded-full font-medium hover:bg-blue-200 transition" data-product="2">عرض التفاصيل</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-16 bg-gray-50 animate-on-scroll">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0 md:pr-10">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-6">من نحن</h2>
+                    <p class="text-gray-600 mb-4">نحن متخصصون في تقديم أجود أنواع ملابس الأطفال التي تجمع بين الراحة والجودة والأناقة.</p>
+                    <p class="text-gray-600 mb-4">نختار بعناية أفضل الخامات والألوان التي تناسب بشرة الأطفال الحساسة وتوفر لهم أقصى درجات الراحة.</p>
+                    <p class="text-gray-600">كل منتجاتنا مصنوعة باحترافية عالية وبتصميمات عصرية تناسب جميع الأذواق.</p>
+                </div>
+                <div class="md:w-1/2">
+                    <img src="https://images.unsplash.com/photo-1604917015190-3bfe9bda6f4c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="About Us" class="rounded-lg shadow-lg w-full">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 bg-white animate-on-scroll">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">اتصل بنا</h2>
+            <div class="max-w-2xl mx-auto bg-gray-50 rounded-lg shadow-md p-8">
+                <form>
+                    <div class="mb-6">
+                        <label for="name" class="block text-gray-700 font-medium mb-2">الاسم</label>
+                        <input type="text" id="name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500">
+                    </div>
+                    <div class="mb-6">
+                        <label for="email" class="block text-gray-700 font-medium mb-2">البريد الإلكتروني</label>
+                        <input type="email" id="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500">
+                    </div>
+                    <div class="mb-6">
+                        <label for="message" class="block text-gray-700 font-medium mb-2">الرسالة</label>
+                        <textarea id="message" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"></textarea>
+                    </div>
+                    <button type="submit" class="bg-pink-600 hover:bg-pink-700 text-white px-6 py-3 rounded-full font-medium transition duration-300 w-full">إرسال</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 animate-on-scroll">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between">
+                <div class="mb-6 md:mb-0">
+                    <h3 class="text-xl font-bold mb-4">Little Fashion</h3>
+                    <p class="text-gray-300">متجرنا متخصص في ملابس الأطفال بجودة عالية وتصميمات مميزة.</p>
+                </div>
+                <div class="mb-6 md:mb-0">
+                    <h3 class="text-xl font-bold mb-4">روابط سريعة</h3>
+                    <ul>
+                        <li class="mb-2"><a href="#home" class="text-gray-300 hover:text-white transition">الرئيسية</a></li>
+                        <li class="mb-2"><a href="#products" class="text-gray-300 hover:text-white transition">المنتجات</a></li>
+                        <li class="mb-2"><a href="#about" class="text-gray-300 hover:text-white transition">من نحن</a></li>
+                        <li><a href="#contact" class="text-gray-300 hover:text-white transition">اتصل بنا</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4">تواصل معنا</h3>
+                    <div class="flex space-x-4 space-x-reverse">
+                        <a href="#" class="text-gray-300 hover:text-white transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2023 Little Fashion. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Product Modal -->
+    <div id="productModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <button id="closeModal" class="float-left text-gray-500 hover:text-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+                <div class="clear-both"></div>
+                
+                <div id="modalContent" class="mt-4">
+                    <!-- Content will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div id="cartSidebar" class="fixed top-0 right-0 h-full w-full md:w-96 bg-white shadow-lg transform translate-x-full transition-transform duration-300 z-50">
+        <div class="p-6 h-full flex flex-col">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold" data-ar="سلة التسوق" data-en="Shopping Cart">سلة التسوق</h3>
+                <button id="closeCart" class="text-gray-500 hover:text-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            
+            <div id="cartItems" class="flex-grow overflow-y-auto mb-4">
+                <!-- Cart items will be loaded here -->
+                <div class="text-center text-gray-500 py-10" data-ar="سلة التسوق فارغة" data-en="Your cart is empty">سلة التسوق فارغة</div>
+            </div>
+            
+            <div class="border-t border-gray-200 pt-4">
+                <div class="flex justify-between mb-2">
+                    <span>المجموع:</span>
+                    <span id="cartTotal" class="font-bold">0 ج.م</span>
+                </div>
+                <div class="flex justify-between mb-4">
+                    <span>مصاريف الشحن:</span>
+                    <span id="shippingCost" class="font-bold">0 ج.م</span>
+                </div>
+                <div class="flex justify-between text-lg font-bold mb-6">
+                    <span>الإجمالي:</span>
+                    <span id="cartGrandTotal">30 ج.م</span>
+                </div>
+                <button id="checkoutBtn" class="bg-pink-600 hover:bg-pink-700 text-white w-full py-3 rounded-lg font-medium transition">إتمام الشراء</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Form -->
+    <div id="checkoutForm" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <button id="closeCheckout" class="float-left text-gray-500 hover:text-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+                <div class="clear-both"></div>
+                
+                <h3 class="text-xl font-bold mb-6 text-center">إتمام الطلب</h3>
+                
+                <form class="checkout-form">
+                    <input type="hidden" id="productName" name="productName">
+                    <input type="hidden" id="productQuantity" name="productQuantity">
+                    <input type="hidden" id="productColor" name="productColor">
+                    <input type="hidden" id="productSize" name="productSize">
+                    <input type="hidden" id="shippingCostInput" name="shippingCost" value="30">
+                    <input type="hidden" id="totalAmount" name="totalAmount">
+                    
+                    <div class="mb-4">
+                        <label for="name" class="block text-gray-700 mb-2">الاسم بالكامل*</label>
+                        <input type="text" id="name" name="name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500" required>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="phone" class="block text-gray-700 mb-2">رقم الهاتف*</label>
+                        <input type="tel" id="phone" name="phone" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500" required>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="governorate" class="block text-gray-700 mb-2">المحافظة*</label>
+                        <select id="governorate" name="governorate" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500" required>
+                            <option value="">اختر المحافظة</option>
+                            <option value="القاهرة">القاهرة</option>
+                            <option value="الجيزة">الجيزة</option>
+                            <option value="الأسكندرية">الأسكندرية</option>
+                            <option value="الدقهلية">الدقهلية</option>
+                            <option value="البحر الأحمر">البحر الأحمر</option>
+                            <option value="البحيرة">البحيرة</option>
+                            <option value="الفيوم">الفيوم</option>
+                            <option value="الغربية">الغربية</option>
+                            <option value="الإسماعيلية">الإسماعيلية</option>
+                            <option value="المنوفية">المنوفية</option>
+                            <option value="المنيا">المنيا</option>
+                            <option value="القليوبية">القليوبية</option>
+                            <option value="الوادي الجديد">الوادي الجديد</option>
+                            <option value="السويس">السويس</option>
+                            <option value="اسوان">اسوان</option>
+                            <option value="اسيوط">اسيوط</option>
+                            <option value="بني سويف">بني سويف</option>
+                            <option value="بورسعيد">بورسعيد</option>
+                            <option value="دمياط">دمياط</option>
+                            <option value="الشرقية">الشرقية</option>
+                            <option value="جنوب سيناء">جنوب سيناء</option>
+                            <option value="كفر الشيخ">كفر الشيخ</option>
+                            <option value="مطروح">مطروح</option>
+                            <option value="الأقصر">الأقصر</option>
+                            <option value="قنا">قنا</option>
+                            <option value="شمال سيناء">شمال سيناء</option>
+                            <option value="سوهاج">سوهاج</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label for="address" class="block text-gray-700 mb-2">العنوان بالتفصيل*</label>
+                        <textarea id="address" name="address" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="bg-pink-600 hover:bg-pink-700 text-white w-full py-3 rounded-lg font-medium transition">إرسال الطلب</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Loader
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.getElementById('loader').style.opacity = '0';
+                setTimeout(function() {
+                    document.getElementById('loader').style.display = 'none';
+                    
+                    // Animate on scroll
+                    const animateElements = document.querySelectorAll('.animate-on-scroll');
+                    animateElements.forEach(el => {
+                        el.classList.add('active');
+                    });
+                    
+                    // Product cards animation
+                    const productCards = document.querySelectorAll('.product-card');
+                    productCards.forEach((card, index) => {
+                        setTimeout(() => {
+                            card.classList.add('visible');
+                        }, index * 200);
+                    });
+                }, 500);
+            }, 2000);
+        });
+
+        // Language Switcher
+        const languageSwitcher = document.getElementById('languageSwitcher');
+        const languageText = document.querySelector('.language-text');
+        let isArabic = true;
+        
+        function switchLanguage() {
+            const elements = document.querySelectorAll('[data-ar], [data-en]');
+            
+            if (isArabic) {
+                document.documentElement.lang = 'en';
+                document.documentElement.dir = 'ltr';
+                document.body.classList.add('en');
+                languageText.textContent = 'العربية';
+                
+                // Update all translatable elements
+                elements.forEach(el => {
+                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                        el.placeholder = el.getAttribute('data-en');
+                    } else {
+                        el.textContent = el.getAttribute('data-en');
+                    }
+                });
+                
+                // Update header direction
+                document.querySelector('header .container').classList.remove('flex-row-reverse');
+                document.querySelector('header nav ul').classList.remove('space-x-reverse');
+            } else {
+                document.documentElement.lang = 'ar';
+                document.documentElement.dir = 'rtl';
+                document.body.classList.remove('en');
+                languageText.textContent = 'English';
+                
+                // Update all translatable elements
+                elements.forEach(el => {
+                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                        el.placeholder = el.getAttribute('data-ar');
+                    } else {
+                        el.textContent = el.getAttribute('data-ar');
+                    }
+                });
+                
+                // Update header direction
+                document.querySelector('header .container').classList.add('flex-row-reverse');
+                document.querySelector('header nav ul').classList.add('space-x-reverse');
+            }
+            isArabic = !isArabic;
+        }
+        
+        languageSwitcher.addEventListener('click', switchLanguage);
+
+        // Animate on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Product Modal
+        const productModal = document.getElementById('productModal');
+        const modalContent = document.getElementById('modalContent');
+        const closeModal = document.getElementById('closeModal');
+        const viewDetailsButtons = document.querySelectorAll('.view-details');
+        
+        // Product data
+        const products = {
+            1: {
+                name: 'طقم جيب شورت اطفال - بستاشيو',
+                price: 250,
+                description: 'طقم مكون من 3 قطع: تيشرت ريب صيفي، شورت، وكاب روزالين باربي تركي. مصنوع من خامات قطنية عالية الجودة تناسب بشرة الأطفال الحساسة.',
+                details: [
+                    'تيشرت: ريب صيفي',
+                    'شورت وكاب: روزالين باربي تركي',
+                    'لون: بستاشيو',
+                    'مقاسات متوفرة:',
+                    '- من سنة إلى سنتين',
+                    '- من ثلاث سنوات إلى خمس سنوات',
+                    '- من ست سنوات إلى ثمان سنوات'
+                ],
+                image: './product1.jpg',
+                colors: ['بستاشيو'],
+                sizes: ['من سنة إلى سنتين', 'من ثلاث سنوات إلى خمس سنوات', 'من ست سنوات إلى ثمان سنوات']
+            },
+            2: {
+                name: 'طقم جيب شورت اطفال - بيبي بلو',
+                price: 250,
+                description: 'طقم مكون من 3 قطع: تيشرت ريب صيفي، شورت، وكاب روزالين باربي تركي. مصنوع من خامات قطنية عالية الجودة تناسب بشرة الأطفال الحساسة.',
+                details: [
+                    'تيشرت: ريب صيفي',
+                    'شورت وكاب: روزالين باربي تركي',
+                    'لون: بيبي بلو',
+                    'مقاسات متوفرة:',
+                    '- من سنة إلى سنتين',
+                    '- من ثلاث سنوات إلى أربع سنوات',
+                    '- خمس سنوات'
+                ],
+                image: './product2.jpg',
+                colors: ['بيبي بلو'],
+                sizes: ['من سنة إلى سنتين', 'من ثلاث سنوات إلى أربع سنوات', 'خمس سنوات']
+            }
+        };
+        
+        viewDetailsButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const productId = this.getAttribute('data-product');
+                const product = products[productId];
+                
+                modalContent.innerHTML = `
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="md:w-1/2">
+                            <img src="${product.image}" alt="${product.name}" class="w-full rounded-lg shadow-md">
+                        </div>
+                        <div class="md:w-1/2">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2">${product.name}</h3>
+                            <p class="text-xl font-bold text-pink-600 mb-4">250 ج.م</p>
+                            
+                            <div class="mb-4">
+                                <label class="block font-bold text-gray-800 mb-2">المحافظة:</label>
+                                <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 governorate-select">
+                                    <option value="">اختر المحافظة</option>
+                                    <option value="القاهرة">القاهرة</option>
+                                    <option value="الجيزة">الجيزة</option>
+                                    <option value="الأسكندرية">الأسكندرية</option>
+                                    <option value="الدقهلية">الدقهلية</option>
+                                    <option value="البحيرة">البحيرة</option>
+                                    <option value="الغربية">الغربية</option>
+                                    <option value="المنوفية">المنوفية</option>
+                                    <option value="القليوبية">القليوبية</option>
+                                    <option value="الشرقية">الشرقية</option>
+                                    <option value="كفر الشيخ">كفر الشيخ</option>
+                                    <option value="دمياط">دمياط</option>
+                                    <option value="بني سويف">بني سويف</option>
+                                    <option value="الفيوم">الفيوم</option>
+                                    <option value="المنيا">المنيا</option>
+                                    <option value="أسيوط">أسيوط</option>
+                                    <option value="سوهاج">سوهاج</option>
+                                    <option value="قنا">قنا</option>
+                                    <option value="الأقصر">الأقصر</option>
+                                    <option value="أسوان">أسوان</option>
+                                    <option value="البحر الأحمر">البحر الأحمر</option>
+                                    <option value="الوادي الجديد">الوادي الجديد</option>
+                                    <option value="مطروح">مطروح</option>
+                                    <option value="شمال سيناء">شمال سيناء</option>
+                                    <option value="جنوب سيناء">جنوب سيناء</option>
+                                    <option value="بورسعيد">بورسعيد</option>
+                                    <option value="السويس">السويس</option>
+                                    <option value="الإسماعيلية">الإسماعيلية</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <h4 class="font-bold text-gray-800 mb-2">الوصف:</h4>
+                                <p class="text-gray-600">${product.description}</p>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <h4 class="font-bold text-gray-800 mb-2">التفاصيل:</h4>
+                                <ul class="list-disc list-inside text-gray-600">
+                                    ${product.details.map(detail => `<li>${detail}</li>`).join('')}
+                                </ul>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block font-bold text-gray-800 mb-2">اللون:</label>
+                                <div class="flex gap-2">
+                                    ${product.colors.map(color => `
+                                        <label class="inline-flex items-center">
+                                            <input type="radio" name="color" value="${color}" class="form-radio text-pink-600" ${product.colors[0] === color ? 'checked' : ''}>
+                                            <span class="mr-2">${color}</span>
+                                        </label>
+                                    `).join('')}
+                                </div>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <label class="block font-bold text-gray-800 mb-2">المقاس:</label>
+                                <div class="grid grid-cols-2 gap-2">
+                                    ${product.sizes.map(size => `
+                                        <label class="inline-flex items-center">
+                                            <input type="radio" name="size" value="${size}" class="form-radio text-pink-600" ${product.sizes[0] === size ? 'checked' : ''}>
+                                            <span class="mr-2">${size}</span>
+                                        </label>
+                                    `).join('')}
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center mb-6">
+                                <label class="block font-bold text-gray-800 mr-4">الكمية:</label>
+                                <div class="flex items-center border border-gray-300 rounded-lg">
+                                    <button class="decrease-qty px-3 py-1 text-xl">-</button>
+                                    <input type="number" min="1" value="1" class="quantity w-12 text-center border-x border-gray-300 py-1">
+                                    <button class="increase-qty px-3 py-1 text-xl">+</button>
+                                </div>
+                            </div>
+                            
+                            <button class="add-to-cart bg-pink-600 hover:bg-pink-700 text-white px-6 py-3 rounded-full font-medium transition w-full" data-product-id="${productId}">إضافة إلى السلة</button>
+                        </div>
+                    </div>
+                `;
+                
+                // Quantity controls
+                const quantityInput = modalContent.querySelector('.quantity');
+                modalContent.querySelector('.increase-qty').addEventListener('click', () => {
+                    quantityInput.value = parseInt(quantityInput.value) + 1;
+                });
+                
+                modalContent.querySelector('.decrease-qty').addEventListener('click', () => {
+                    if (parseInt(quantityInput.value) > 1) {
+                        quantityInput.value = parseInt(quantityInput.value) - 1;
+                    }
+                });
+                
+                // Add to cart
+                modalContent.querySelector('.add-to-cart').addEventListener('click', () => {
+                    const color = modalContent.querySelector('input[name="color"]:checked').value;
+                    const size = modalContent.querySelector('input[name="size"]:checked').value;
+                    const quantity = parseInt(quantityInput.value);
+                    const governorate = modalContent.querySelector('.governorate-select').value;
+                    
+                    if (!governorate) {
+                        alert('الرجاء اختيار المحافظة');
+                        return;
+                    }
+                    
+                    addToCart(productId, product.name, 250, color, size, quantity, governorate);
+                    productModal.classList.add('hidden');
+                    
+                    // Show cart briefly
+                    cartSidebar.classList.remove('translate-x-full');
+                    setTimeout(() => {
+                        cartSidebar.classList.add('translate-x-full');
+                    }, 2000);
+                });
+                
+                productModal.classList.remove('hidden');
+            });
+        });
+        
+        closeModal.addEventListener('click', function() {
+            productModal.classList.add('hidden');
+        });
+        
+        productModal.addEventListener('click', function(e) {
+            if (e.target === productModal) {
+                productModal.classList.add('hidden');
+            }
+        });
+
+        // Cart functionality
+        const cartButton = document.getElementById('cartButton');
+        const cartSidebar = document.getElementById('cartSidebar');
+        const closeCart = document.getElementById('closeCart');
+        const cartItems = document.getElementById('cartItems');
+        const cartCount = document.getElementById('cartCount');
+        const cartTotal = document.getElementById('cartTotal');
+        const cartGrandTotal = document.getElementById('cartGrandTotal');
+        const shippingCost = document.getElementById('shippingCost');
+        const checkoutBtn = document.getElementById('checkoutBtn');
+        
+        let cart = [];
+        
+        function addToCart(productId, name, price, color, size, quantity, governorate) {
+            // Check if item already exists in cart
+            const existingItem = cart.find(item => 
+                item.productId === productId && 
+                item.color === color && 
+                item.size === size
+            );
+            
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                cart.push({
+                    productId,
+                    name,
+                    price: 250,
+                    color,
+                    size,
+                    quantity,
+                    governorate
+                });
+            }
+            
+            updateCart();
+        }
+        
+        function updateCart() {
+            // Update cart count
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            cartCount.textContent = totalItems;
+            
+            // Update cart items
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<div class="text-center text-gray-500 py-10">سلة التسوق فارغة</div>';
+            } else {
+                cartItems.innerHTML = cart.map((item, index) => `
+                    <div class="cart-item border-b border-gray-200 py-4">
+                        <div class="flex justify-between">
+                            <div class="flex-1">
+                                <h4 class="font-medium">${item.name}</h4>
+                                <p class="text-sm text-gray-500">${item.color} - ${item.size}</p>
+                                <div class="flex items-center mt-2">
+                                    <button class="decrease-item text-gray-500 hover:text-pink-600" data-index="${index}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+                                        </svg>
+                                    </button>
+                                    <span class="quantity mx-2">${item.quantity}</span>
+                                    <button class="increase-item text-gray-500 hover:text-pink-600" data-index="${index}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-medium">${item.price * item.quantity} ج.م</p>
+                                <button class="remove-item text-xs text-gray-500 hover:text-pink-600 mt-2" data-index="${index}">إزالة</button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                // Add event listeners to quantity controls
+                document.querySelectorAll('.increase-item').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const index = this.getAttribute('data-index');
+                        cart[index].quantity += 1;
+                        updateCart();
+                    });
+                });
+                
+                document.querySelectorAll('.decrease-item').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const index = this.getAttribute('data-index');
+                        if (cart[index].quantity > 1) {
+                            cart[index].quantity -= 1;
+                        } else {
+                            cart.splice(index, 1);
+                        }
+                        updateCart();
+                    });
+                });
+                
+                document.querySelectorAll('.remove-item').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const index = this.getAttribute('data-index');
+                        cart.splice(index, 1);
+                        updateCart();
+                    });
+                });
+            }
+            
+            // Update totals
+            const subtotal = cart.reduce((total, item) => total + (250 * item.quantity), 0);
+            const selectedGov = document.getElementById('governorate') ? document.getElementById('governorate').value : '';
+            let shipping = 0;
+            
+            if (cart.length > 0) {
+                const gov = cart[0].governorate;
+                if (['القاهرة', 'الجيزة', 'الأسكندرية'].includes(gov)) {
+                    shipping = 45 
+                } else if (['الدقهلية', 'البحيرة', 'الغربية', 'المنوفية', 'القليوبية', 'الشرقية', 'كفر الشيخ', 'دمياط'].includes(gov)) {
+                    shipping = 55 
+                } else {
+                    shipping = 65 
+                }
+            }
+            
+            const grandTotal = subtotal + shipping;
+            
+            cartTotal.textContent = subtotal + ' ج.م';
+            shippingCost.textContent = shipping + ' ج.م ' + (selectedGov ) ;
+            cartGrandTotal.textContent = grandTotal + ' ج.م';
+        }
+        
+        cartButton.addEventListener('click', function() {
+            cartSidebar.classList.toggle('translate-x-full');
+        });
+        
+        closeCart.addEventListener('click', function() {
+            cartSidebar.classList.add('translate-x-full');
+        });
+        
+        // Checkout
+        const checkoutForm = document.getElementById('checkoutForm');
+        const closeCheckout = document.getElementById('closeCheckout');
+        const checkoutFormElement = document.querySelector('.checkout-form');
+        
+        checkoutBtn.addEventListener('click', function() {
+            if (cart.length === 0) {
+                alert('سلة التسوق فارغة');
+                return;
+            }
+            
+            // Prepare product data for checkout
+            const productNames = cart.map(item => `${item.name} (${item.color}, ${item.size})`).join('، ');
+            const totalQuantity = cart.reduce((total, item) => total + item.quantity, 0);
+            const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+            const shipping = 30;
+            const grandTotal = subtotal + shipping;
+            
+            document.getElementById('productName').value = productNames;
+            document.getElementById('productQuantity').value = totalQuantity;
+            document.getElementById('productColor').value = cart.map(item => item.color).join('، ');
+            document.getElementById('productSize').value = cart.map(item => item.size).join('، ');
+            document.getElementById('shippingCostInput').value = shipping;
+            document.getElementById('totalAmount').value = grandTotal;
+            
+            cartSidebar.classList.add('translate-x-full');
+            checkoutForm.classList.remove('hidden');
+        });
+        
+        closeCheckout.addEventListener('click', function() {
+            checkoutForm.classList.add('hidden');
+        });
+        
+        checkoutForm.addEventListener('click', function(e) {
+            if (e.target === checkoutForm) {
+                checkoutForm.classList.add('hidden');
+            }
+        });
+        
+        checkoutFormElement.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Get form data
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData.entries());
+    
+    // Prepare Messenger message
+    const message = `طلب جديد من Little Fashion\n\n` +
+                    `الاسم: ${data.name}\n` +
+                    `رقم الهاتف: ${data.phone}\n` +
+                    `المحافظة: ${data.governorate}\n` +
+                    `العنوان: ${data.address}\n\n` +
+                    `تفاصيل الطلب:\n` +
+                    `المنتج: ${data.productName}\n` +
+                    `العدد: ${data.productQuantity}\n` +
+                    `اللون: ${data.productColor}\n` +
+                    `المقاس: ${data.productSize}\n` +
+                    `مصاريف الشحن: ${data.shippingCost} ج.م\n` +
+                    `إجمالي المبلغ: ${data.totalAmount} ج.م`;
+    
+    // Encode the message for URL
+    const encodedMessage = encodeURIComponent(message);
+    
+    // Open Messenger chat with the page
+    window.open(`https://m.me/talabakservice?text=${encodedMessage}`, '_blank');
+    
+    // Reset cart and close forms
+    cart = [];
+    updateCart();
+    checkoutForm.classList.add('hidden');
+    this.reset();
+    
+    // Show success message
+    alert('تم إرسال طلبك بنجاح! سوف نتصل بك قريبًا لتأكيد التفاصيل.');
+});
+    </script>
+</body>
+</html>
