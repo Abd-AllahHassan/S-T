@@ -3,206 +3,242 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Little Fashion - ملابس أطفال</title>
+    <title>متجر S&T - ملابس أطفال</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
         
-        :root {
-            --primary-color: #FF9AA2;
-            --secondary-color: #FFB7B2;
-            --accent-color: #FFDAC1;
-            --dark-color: #E2F0CB;
-            --light-color: #B5EAD7;
+        * {
+            font-family: 'Cairo', sans-serif;
         }
         
-        body {
-            font-family: 'Tajawal', sans-serif;
-            overflow-x: hidden;
+        .animate-bounce-slow {
+            animation: bounce 2s infinite;
         }
         
-        .en {
-            font-family: 'Montserrat', sans-serif;
-            direction: ltr;
+        .animate-fade-in {
+            animation: fadeIn 1s ease-in;
         }
         
-        .loader {
-            width: 100px;
-            height: 100px;
-            perspective: 1000px;
+        .animate-slide-up {
+            animation: slideUp 0.8s ease-out;
         }
         
-        .loader-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            transition: transform 0.8s;
-            transform-style: preserve-3d;
-            animation: rotate 3s infinite linear;
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         
-        @keyframes rotate {
-            0% { transform: rotateY(0deg); }
-            100% { transform: rotateY(360deg); }
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
         
-        .loader-front, .loader-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 50%;
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-            box-shadow: 0 0 20px rgba(0,0,0,0.2);
-        }
-        
-        .loader-back {
-            transform: rotateY(180deg);
+        .gradient-bg {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
         }
         
         .product-card {
             transition: all 0.3s ease;
-            transform: translateY(50px);
-            opacity: 0;
         }
         
-        .product-card.visible {
-            transform: translateY(0);
-            opacity: 1;
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
         
-        .animate-on-scroll {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: all 0.6s ease;
+        .cart-badge {
+            animation: pulse 2s infinite;
         }
         
-        .animate-on-scroll.active {
-            opacity: 1;
-            transform: translateY(0);
+        .modal {
+            backdrop-filter: blur(10px);
         }
         
-        .cart-item {
-            animation: slideIn 0.5s ease forwards;
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
         }
-        
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+
+        .hero-image {
+            transition: transform 0.3s ease;
         }
-        
-        .checkout-form input, .checkout-form select {
-            transition: all 0.3s ease;
-        }
-        
-        .checkout-form input:focus, .checkout-form select:focus {
-            transform: scale(1.02);
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+
+        .hero-image:hover {
+            transform: scale(1.05);
         }
     </style>
 </head>
 <body class="bg-gray-50">
-    <!-- Loader -->
-    <div id="loader" class="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center">
-        <div class="loader mb-8">
-            <div class="loader-inner">
-                <div class="loader-front text-white font-bold text-xl">Little Fashion</div>
-                <div class="loader-back text-white font-bold text-xl">أزياء أطفال</div>
-            </div>
-        </div>
-        <p class="text-gray-600 mt-4">جاري التحميل...</p>
-    </div>
-
     <!-- Header -->
-    <header class="bg-gradient-to-r from-pink-200 to-blue-200 py-6 shadow-lg animate-on-scroll">
+    <header class="gradient-bg text-white py-4 sticky top-0 z-50 animate-fade-in">
         <div class="container mx-auto px-4 flex justify-between items-center">
-            <img src="./ST-REBRANDINGx.png" alt="logo" width="50px" height="50px">
-            <nav>
-                <ul class="flex space-x-6 space-x-reverse">
-                    <li><a href="#home" class="text-gray-800 hover:text-pink-600 transition" data-ar="الرئيسية" data-en="Home">الرئيسية</a></li>
-                    <li><a href="#products" class="text-gray-800 hover:text-pink-600 transition" data-ar="المنتجات" data-en="Products">المنتجات</a></li>
-                    <li><a href="#about" class="text-gray-800 hover:text-pink-600 transition" data-ar="من نحن" data-en="About">من نحن</a></li>
-                    <li><a href="#contact" class="text-gray-800 hover:text-pink-600 transition" data-ar="اتصل بنا" data-en="Contact">اتصل بنا</a></li>
-                </ul>
-            </nav>
             <div class="flex items-center space-x-4 space-x-reverse">
-                <button id="languageSwitcher" class="bg-white shadow-md rounded-full px-4 py-2 flex items-center">
-                    <span class="language-text">English</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
-                    </svg>
-                </button>
-                <div class="relative">
-                    <button id="cartButton" class="text-gray-800 hover:text-pink-600 transition relative">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                        </svg>
-                        <span id="cartCount" class="absolute -top-2 -right-2 bg-pink-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
-                    </button>
-                </div>
+                <img src="./images/logo.png" alt="S&T Logo" class="w-12 h-12">
+                <h1 class="text-2xl font-bold">متجر S&T</h1>
             </div>
+            <button id="cartBtn" class="relative bg-white bg-opacity-20 p-3 rounded-full hover:bg-opacity-30 transition-all">
+                <i class="fas fa-shopping-cart text-xl"></i>
+                <span id="cartCount" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm cart-badge">0</span>
+            </button>
         </div>
     </header>
 
     <!-- Hero Section -->
-    <section id="home" class="py-20 bg-gradient-to-r from-pink-100 to-blue-100 animate-on-scroll">
-        <div class="container mx-auto px-4 flex flex-col md:flex-row items-center">
-            <div class="md:w-1/2 mb-10 md:mb-0">
-                <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-6" data-ar="أزياء مريحة وعصرية لأطفالك" data-en="Comfortable and stylish fashion for your kids">أزياء مريحة وعصرية لأطفالك</h2>
-                <p class="text-lg text-gray-600 mb-8" data-ar="اكتشف مجموعتنا الفريدة من الملابس المصممة خصيصًا لراحة أطفالك وأناقتهم" data-en="Discover our unique collection of clothes specially designed for your children's comfort and style">اكتشف مجموعتنا الفريدة من الملابس المصممة خصيصًا لراحة أطفالك وأناقتهم</p>
-                <a href="#products" class="bg-pink-600 hover:bg-pink-700 text-white px-6 py-3 rounded-full font-medium transition duration-300 inline-block" data-ar="تصفح المنتجات" data-en="Browse Products">تصفح المنتجات</a>
+    <section class="gradient-bg text-white py-20 animate-fade-in">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-5xl font-bold mb-6 animate-slide-up">أجمل ملابس الأطفال</h2>
+                <p class="text-xl mb-8 animate-slide-up" style="animation-delay: 0.2s;">جودة عالية وتصاميم رائعة لأطفالك</p>
+                <button onclick="scrollToProducts()" class="bg-white text-purple-600 px-8 py-3 rounded-full font-bold hover:bg-gray-100 transition-all animate-bounce-slow">
+                    تسوق الآن
+                </button>
             </div>
-            <div class="md:w-1/2">
-                <img src="./hero.jpg" alt="Kids Fashion" class="rounded-lg shadow-xl w-full max-w-md mx-auto transform hover:scale-105 transition duration-500">
+            
+            <!-- Hero Images -->
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mt-16">
+                <div class="text-center animate-slide-up">
+                    <img src="./images/hero2.jpg" alt="طقم بيبي بلو" class="w-full h-96 object-cover rounded-3xl shadow-2xl hero-image">
+                    <p class="text-lg font-bold mt-4">طقم بيبي بلو الأنيق</p>
+                </div>
+                
+                <div class="text-center animate-slide-up" style="animation-delay: 0.2s;">
+                    <img src="./images/hero.jpg" alt="طقم بستاشيو" class="w-full h-96 object-cover rounded-3xl shadow-2xl hero-image">
+                    <p class="text-lg font-bold mt-4">طقم بستاشيو المميز</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-6xl mx-auto">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div class="text-center animate-slide-up">
+                        <img src="./images/logo.png" alt="S&T Logo" class="w-64 h-64 mx-auto mb-6">
+                    </div>
+                    
+                    <div class="animate-slide-up" style="animation-delay: 0.2s;">
+                        <h2 class="text-4xl font-bold mb-6 text-gray-800">من نحن</h2>
+                        <p class="text-lg text-gray-600 leading-relaxed mb-6">
+                            متجر S&T هو وجهتك المثالية لأجمل وأرقى ملابس الأطفال. نحن نؤمن بأن كل طفل يستحق أن يبدو رائعاً ويشعر بالراحة في نفس الوقت.
+                        </p>
+                        <p class="text-lg text-gray-600 leading-relaxed mb-6">
+                            نقدم مجموعة مختارة بعناية من الملابس عالية الجودة المصنوعة من أفضل الخامات التركية، مع تصاميم عصرية تناسب جميع المناسبات.
+                        </p>
+                        <p class="text-lg text-gray-600 leading-relaxed">
+                            رضا عملائنا هو أولويتنا، ونسعى دائماً لتقديم أفضل خدمة وأسرع توصيل لجميع أنحاء مصر.
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Products Section -->
-    <section id="products" class="py-16 bg-white">
+    <section id="products" class="py-20 bg-gray-50">
         <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12 animate-on-scroll" data-ar="منتجاتنا" data-en="Our Products">منتجاتنا</h2>
+            <h2 class="text-4xl font-bold text-center mb-16 text-gray-800 animate-slide-up">منتجاتنا المميزة</h2>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Product 1 -->
-                <div class="product-card bg-white rounded-lg overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl">
-                    <div class="relative overflow-hidden">
-                        <img src="./product1.jpg" alt="طقم جيب شورت اطفال" class="w-full h-64 object-cover transition duration-500 hover:scale-110">
-                        <div class="absolute top-4 right-4 bg-pink-600 text-white px-3 py-1 rounded-full text-sm font-medium">جديد</div>
+            <div class="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
+                <!-- Product 1 - Pistachio -->
+                <div class="product-card bg-white rounded-3xl shadow-lg overflow-hidden animate-slide-up">
+                    <div class="relative">
+                        <img src="./images/product1.jpg" alt="طقم بستاشيو" class="w-full h-80 object-cover">
+                        <div class="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                            جديد
+                        </div>
                     </div>
                     <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-2" data-ar="طقم جيب شورت اطفال - بستاشيو" data-en="Kids Pocket Shorts Set - Pistachio">طقم جيب شورت اطفال - بستاشيو</h3>
-                        <p class="text-gray-600 mb-4" data-ar="طقم مكون من 3 قطع: تيشرت، شورت، وكاب" data-en="3-piece set: T-shirt, shorts, and cap">طقم مكون من 3 قطع: تيشرت، شورت، وكاب</p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-xl font-bold text-pink-600">250 ج.م</span>
-                            <button class="view-details bg-blue-100 text-blue-800 px-4 py-2 rounded-full font-medium hover:bg-blue-200 transition" data-product="1" data-ar="عرض التفاصيل" data-en="View Details">عرض التفاصيل</button>
+                        <h3 class="text-2xl font-bold mb-2 text-gray-800">طقم جيب شورت - بستاشيو</h3>
+                        <p class="text-gray-600 mb-4">طقم أطفال 3 قطع - تيشرت ريب صيفي، شورت وكاب روزالين باربي تركي</p>
+                        
+                        <div class="mb-4">
+                            <h4 class="font-bold text-gray-700 mb-2">المقاسات المتاحة:</h4>
+                            <div class="space-y-2">
+                                <div class="flex justify-between items-center">
+                                    <span>من سنة إلى سنتين</span>
+                                    <span class="text-green-600 font-bold">150 جنيه</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span>من 3 سنوات إلى 5 سنين</span>
+                                    <span class="text-green-600 font-bold">170 جنيه</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span>من 6 سنوات إلى 8 سنوات</span>
+                                    <span class="text-green-600 font-bold">190 جنيه</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <select id="size1" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                                <option value="">اختر المقاس</option>
+                                <option value="1-2,250">من سنة إلى سنتين - 250 جنيه</option>
+                                <option value="3-5,250">من 3 سنوات إلى 5 سنين - 250 جنيه</option>
+                                <option value="6-8,250">من 6 سنوات إلى 8 سنوات - 250 جنيه</option>
+                            </select>
+                            
+                            <div class="flex space-x-3 space-x-reverse">
+                                <input type="number" id="qty1" min="1" value="1" class="w-20 p-3 border border-gray-300 rounded-lg text-center">
+                                <button onclick="addToCart('pistachio')" class="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 rounded-lg font-bold hover:from-purple-700 hover:to-blue-700 transition-all">
+                                    <i class="fas fa-cart-plus ml-2"></i>
+                                    أضف للسلة
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Product 2 -->
-                <div class="product-card bg-white rounded-lg overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl">
-                    <div class="relative overflow-hidden">
-                        <img src="./product2.jpg" alt="طقم جيب شورت اطفال" class="w-full h-64 object-cover transition duration-500 hover:scale-110">
-                        <div class="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">جديد</div>
+
+                <!-- Product 2 - Baby Blue -->
+                <div class="product-card bg-white rounded-3xl shadow-lg overflow-hidden animate-slide-up" style="animation-delay: 0.2s;">
+                    <div class="relative">
+                        <img src="./images/product2.jpg" alt="طقم بيبي بلو" class="w-full h-80 object-cover">
+                        <div class="absolute top-4 right-4 bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                            مميز
+                        </div>
                     </div>
                     <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">طقم جيب شورت اطفال - بيبي بلو</h3>
-                        <p class="text-gray-600 mb-4">طقم مكون من 3 قطع: تيشرت، شورت، وكاب</p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-xl font-bold text-pink-600">250 ج.م</span>
-                            <button class="view-details bg-blue-100 text-blue-800 px-4 py-2 rounded-full font-medium hover:bg-blue-200 transition" data-product="2">عرض التفاصيل</button>
+                        <h3 class="text-2xl font-bold mb-2 text-gray-800">طقم جيب شورت - بيبي بلو</h3>
+                        <p class="text-gray-600 mb-4">طقم أطفال 3 قطع - تيشرت ريب صيفي، شورت وكاب روزالين باربي تركي</p>
+                        
+                        <div class="mb-4">
+                            <h4 class="font-bold text-gray-700 mb-2">المقاسات المتاحة:</h4>
+                            <div class="space-y-2">
+                                <div class="flex justify-between items-center">
+                                    <span>من سنة إلى سنتين</span>
+                                    <span class="text-blue-600 font-bold">250 جنيه</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span>من 3 سنوات إلى 4 سنين</span>
+                                    <span class="text-blue-600 font-bold">250 جنيه</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span>5 سنوات</span>
+                                    <span class="text-blue-600 font-bold">250 جنيه</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <select id="size2" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                                <option value="">اختر المقاس</option>
+                                <option value="1-2,250">من سنة إلى سنتين - 250 جنيه</option>
+                                <option value="3-4,250">من 3 سنوات إلى 4 سنين - 250 جنيه</option>
+                                <option value="5,250">5 سنوات - 250 جنيه</option>
+                            </select>
+                            
+                            <div class="flex space-x-3 space-x-reverse">
+                                <input type="number" id="qty2" min="1" value="1" class="w-20 p-3 border border-gray-300 rounded-lg text-center">
+                                <button onclick="addToCart('babyblue')" class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-bold hover:from-blue-700 hover:to-purple-700 transition-all">
+                                    <i class="fas fa-cart-plus ml-2"></i>
+                                    أضف للسلة
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -210,709 +246,418 @@
         </div>
     </section>
 
-    <!-- About Section -->
-    <section id="about" class="py-16 bg-gray-50 animate-on-scroll">
+    <!-- Testimonials Section -->
+    <section class="gradient-bg py-20">
         <div class="container mx-auto px-4">
-            <div class="flex flex-col md:flex-row items-center">
-                <div class="md:w-1/2 mb-10 md:mb-0 md:pr-10">
-                    <h2 class="text-3xl font-bold text-gray-800 mb-6">من نحن</h2>
-                    <p class="text-gray-600 mb-4">نحن متخصصون في تقديم أجود أنواع ملابس الأطفال التي تجمع بين الراحة والجودة والأناقة.</p>
-                    <p class="text-gray-600 mb-4">نختار بعناية أفضل الخامات والألوان التي تناسب بشرة الأطفال الحساسة وتوفر لهم أقصى درجات الراحة.</p>
-                    <p class="text-gray-600">كل منتجاتنا مصنوعة باحترافية عالية وبتصميمات عصرية تناسب جميع الأذواق.</p>
+            <h2 class="text-4xl font-bold text-center mb-16 text-white animate-slide-up">آراء عملائنا الكرام</h2>
+            
+            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div class="testimonial-card p-6 animate-slide-up">
+                    <div class="flex items-center mb-4">
+                        <div class="flex text-yellow-400 text-xl">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 mb-4">"الاوردر عامل ايه جميل جدا تسليم كتير. كل حاجة تحفة عندكم"</p>
+                    <div class="flex items-center">
+                        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/6.jpg-5uVP4hYRZkVEFZfWPq25o9Y8Srnnqd.jpeg" alt="عميل" class="w-12 h-12 rounded-full ml-3">
+                        <span class="font-bold text-gray-800">عميل راضي</span>
+                    </div>
                 </div>
-                <div class="md:w-1/2">
-                    <img src="https://images.unsplash.com/photo-1604917015190-3bfe9bda6f4c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="About Us" class="rounded-lg shadow-lg w-full">
+
+                <div class="testimonial-card p-6 animate-slide-up" style="animation-delay: 0.2s;">
+                    <div class="flex items-center mb-4">
+                        <div class="flex text-yellow-400 text-xl">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 mb-4">"انا بقول راي الشغل جميل انا اخده منه قبل العيد طفمين ويجد خامه كويسه جدا شكرا علي المصداقيه"</p>
+                    <div class="flex items-center">
+                        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/5.jpg-7xHXIM7l8eYsAtnb4oTUmUMZx5Ftp5.jpeg" alt="عميل" class="w-12 h-12 rounded-full ml-3">
+                        <span class="font-bold text-gray-800">أم سعيدة</span>
+                    </div>
+                </div>
+
+                <div class="testimonial-card p-6 animate-slide-up" style="animation-delay: 0.4s;">
+                    <div class="flex items-center mb-4">
+                        <div class="flex text-yellow-400 text-xl">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 mb-4">"شكرا لكم ارقع واجمل اوردر بيوصلني بنتي مبسوطة فيه جدا"</p>
+                    <div class="flex items-center">
+                        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/9.jpg-N8Edt9aa7soZrgWcn8AJZedu6aTAxi.jpeg" alt="عميل" class="w-12 h-12 rounded-full ml-3">
+                        <span class="font-bold text-gray-800">ذوقكم جميل</span>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="py-16 bg-white animate-on-scroll">
+    <!-- Models Section -->
+    <section class="py-20 bg-gray-100">
         <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">اتصل بنا</h2>
-            <div class="max-w-2xl mx-auto bg-gray-50 rounded-lg shadow-md p-8">
-                <form>
-                    <div class="mb-6">
-                        <label for="name" class="block text-gray-700 font-medium mb-2">الاسم</label>
-                        <input type="text" id="name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500">
-                    </div>
-                    <div class="mb-6">
-                        <label for="email" class="block text-gray-700 font-medium mb-2">البريد الإلكتروني</label>
-                        <input type="email" id="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500">
-                    </div>
-                    <div class="mb-6">
-                        <label for="message" class="block text-gray-700 font-medium mb-2">الرسالة</label>
-                        <textarea id="message" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"></textarea>
-                    </div>
-                    <button type="submit" class="bg-pink-600 hover:bg-pink-700 text-white px-6 py-3 rounded-full font-medium transition duration-300 w-full">إرسال</button>
-                </form>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-8 animate-on-scroll">
-        <div class="container mx-auto px-4">
-            <div class="flex flex-col md:flex-row justify-between">
-                <div class="mb-6 md:mb-0">
-                    <h3 class="text-xl font-bold mb-4">Little Fashion</h3>
-                    <p class="text-gray-300">متجرنا متخصص في ملابس الأطفال بجودة عالية وتصميمات مميزة.</p>
+            <h2 class="text-4xl font-bold text-center mb-16 text-gray-800 animate-slide-up">أطفالنا الجميلون</h2>
+            
+            <div class="grid md:grid-cols-2 gap-12 max-w-4xl mx-auto">
+                <div class="text-center animate-slide-up">
+                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/8.jpg-2g6CcaLdEO3D5qLcIk8eudn3kQQYjp.jpeg" alt="طفل يرتدي الطقم الأزرق" class="w-full h-96 object-cover rounded-3xl shadow-lg mb-4">
+                    <p class="text-gray-700 font-bold">طقم بيبي بلو الرائع</p>
                 </div>
-                <div class="mb-6 md:mb-0">
-                    <h3 class="text-xl font-bold mb-4">روابط سريعة</h3>
-                    <ul>
-                        <li class="mb-2"><a href="#home" class="text-gray-300 hover:text-white transition">الرئيسية</a></li>
-                        <li class="mb-2"><a href="#products" class="text-gray-300 hover:text-white transition">المنتجات</a></li>
-                        <li class="mb-2"><a href="#about" class="text-gray-300 hover:text-white transition">من نحن</a></li>
-                        <li><a href="#contact" class="text-gray-300 hover:text-white transition">اتصل بنا</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-xl font-bold mb-4">تواصل معنا</h3>
-                    <div class="flex space-x-4 space-x-reverse">
-                        <a href="#" class="text-gray-300 hover:text-white transition">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/>
-                            </svg>
-                        </a>
-                        <a href="#" class="text-gray-300 hover:text-white transition">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                            </svg>
-                        </a>
-                        <a href="#" class="text-gray-300 hover:text-white transition">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-                <p>&copy; 2023 Little Fashion. جميع الحقوق محفوظة.</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Product Modal -->
-    <div id="productModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-            <div class="p-6">
-                <button id="closeModal" class="float-left text-gray-500 hover:text-gray-700">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-                <div class="clear-both"></div>
                 
-                <div id="modalContent" class="mt-4">
-                    <!-- Content will be loaded here -->
+                <div class="text-center animate-slide-up" style="animation-delay: 0.2s;">
+                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/7.jpg-cm8zn3XEQFWGGAO2knkcZoAEb3zLNA.jpeg" alt="طفل يرتدي الطقم الأخضر" class="w-full h-96 object-cover rounded-3xl shadow-lg mb-4">
+                    <p class="text-gray-700 font-bold">طقم بستاشيو المميز</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" class="fixed inset-0 bg-black bg-opacity-50 modal hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-3xl max-w-2xl w-full max-h-screen overflow-y-auto">
+                <div class="p-6 border-b">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-2xl font-bold text-gray-800">سلة التسوق</h3>
+                        <button onclick="closeCart()" class="text-gray-500 hover:text-gray-700 text-2xl">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="cartItems" class="p-6">
+                    <!-- Cart items will be populated here -->
+                </div>
+                
+                <div class="p-6 border-t">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-xl font-bold">الإجمالي:</span>
+                        <span id="cartTotal" class="text-2xl font-bold text-purple-600">0 جنيه</span>
+                    </div>
+                    <button onclick="proceedToCheckout()" class="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 rounded-lg font-bold hover:from-purple-700 hover:to-blue-700 transition-all">
+                        إتمام الطلب
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Cart Sidebar -->
-    <div id="cartSidebar" class="fixed top-0 right-0 h-full w-full md:w-96 bg-white shadow-lg transform translate-x-full transition-transform duration-300 z-50">
-        <div class="p-6 h-full flex flex-col">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-xl font-bold" data-ar="سلة التسوق" data-en="Shopping Cart">سلة التسوق</h3>
-                <button id="closeCart" class="text-gray-500 hover:text-gray-700">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-            
-            <div id="cartItems" class="flex-grow overflow-y-auto mb-4">
-                <!-- Cart items will be loaded here -->
-                <div class="text-center text-gray-500 py-10" data-ar="سلة التسوق فارغة" data-en="Your cart is empty">سلة التسوق فارغة</div>
-            </div>
-            
-            <div class="border-t border-gray-200 pt-4">
-                <div class="flex justify-between mb-2">
-                    <span>المجموع:</span>
-                    <span id="cartTotal" class="font-bold">0 ج.م</span>
+    <!-- Checkout Modal -->
+    <div id="checkoutModal" class="fixed inset-0 bg-black bg-opacity-50 modal hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-3xl max-w-2xl w-full max-h-screen overflow-y-auto">
+                <div class="p-6 border-b">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-2xl font-bold text-gray-800">إتمام الطلب</h3>
+                        <button onclick="closeCheckout()" class="text-gray-500 hover:text-gray-700 text-2xl">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
                 </div>
-                <div class="flex justify-between mb-4">
-                    <span>مصاريف الشحن:</span>
-                    <span id="shippingCost" class="font-bold">0 ج.م</span>
-                </div>
-                <div class="flex justify-between text-lg font-bold mb-6">
-                    <span>الإجمالي:</span>
-                    <span id="cartGrandTotal">30 ج.م</span>
-                </div>
-                <button id="checkoutBtn" class="bg-pink-600 hover:bg-pink-700 text-white w-full py-3 rounded-lg font-medium transition">إتمام الشراء</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Checkout Form -->
-    <div id="checkoutForm" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
-            <div class="p-6">
-                <button id="closeCheckout" class="float-left text-gray-500 hover:text-gray-700">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-                <div class="clear-both"></div>
                 
-                <h3 class="text-xl font-bold mb-6 text-center">إتمام الطلب</h3>
-                
-                <form class="checkout-form">
-                    <input type="hidden" id="productName" name="productName">
-                    <input type="hidden" id="productQuantity" name="productQuantity">
-                    <input type="hidden" id="productColor" name="productColor">
-                    <input type="hidden" id="productSize" name="productSize">
-                    <input type="hidden" id="shippingCostInput" name="shippingCost" value="30">
-                    <input type="hidden" id="totalAmount" name="totalAmount">
-                    
-                    <div class="mb-4">
-                        <label for="name" class="block text-gray-700 mb-2">الاسم بالكامل*</label>
-                        <input type="text" id="name" name="name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500" required>
+                <form id="checkoutForm" class="p-6 space-y-4">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2">الاسم</label>
+                            <input type="text" id="customerName" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2">رقم الموبيل</label>
+                            <input type="tel" id="customerPhone" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                        </div>
                     </div>
                     
-                    <div class="mb-4">
-                        <label for="phone" class="block text-gray-700 mb-2">رقم الهاتف*</label>
-                        <input type="tel" id="phone" name="phone" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500" required>
-                    </div>
-                    
-                    <div class="mb-4">
-                        <label for="governorate" class="block text-gray-700 mb-2">المحافظة*</label>
-                        <select id="governorate" name="governorate" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500" required>
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2">المحافظة</label>
+                        <select id="governorate" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500" onchange="updateShipping()">
                             <option value="">اختر المحافظة</option>
-                            <option value="القاهرة">القاهرة</option>
-                            <option value="الجيزة">الجيزة</option>
-                            <option value="الأسكندرية">الأسكندرية</option>
-                            <option value="الدقهلية">الدقهلية</option>
-                            <option value="البحر الأحمر">البحر الأحمر</option>
-                            <option value="البحيرة">البحيرة</option>
-                            <option value="الفيوم">الفيوم</option>
-                            <option value="الغربية">الغربية</option>
-                            <option value="الإسماعيلية">الإسماعيلية</option>
-                            <option value="المنوفية">المنوفية</option>
-                            <option value="المنيا">المنيا</option>
-                            <option value="القليوبية">القليوبية</option>
-                            <option value="الوادي الجديد">الوادي الجديد</option>
-                            <option value="السويس">السويس</option>
-                            <option value="اسوان">اسوان</option>
-                            <option value="اسيوط">اسيوط</option>
-                            <option value="بني سويف">بني سويف</option>
-                            <option value="بورسعيد">بورسعيد</option>
-                            <option value="دمياط">دمياط</option>
-                            <option value="الشرقية">الشرقية</option>
-                            <option value="جنوب سيناء">جنوب سيناء</option>
-                            <option value="كفر الشيخ">كفر الشيخ</option>
-                            <option value="مطروح">مطروح</option>
-                            <option value="الأقصر">الأقصر</option>
-                            <option value="قنا">قنا</option>
-                            <option value="شمال سيناء">شمال سيناء</option>
-                            <option value="سوهاج">سوهاج</option>
+                            <option value="cairo,45">القاهرة - 45 جنيه</option>
+                            <option value="giza,45">الجيزة - 45 جنيه</option>
+                            <option value="alexandria,45">الإسكندرية - 45 جنيه</option>
+                            <option value="delta,55">محافظات الدلتا - 55 جنيه</option>
+                            <option value="upper,65">الصعيد ومرسى مطروح - 65 جنيه</option>
                         </select>
                     </div>
                     
-                    <div class="mb-6">
-                        <label for="address" class="block text-gray-700 mb-2">العنوان بالتفصيل*</label>
-                        <textarea id="address" name="address" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500" required></textarea>
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2">العنوان</label>
+                        <textarea id="customerAddress" required rows="3" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"></textarea>
                     </div>
                     
-                    <button type="submit" class="bg-pink-600 hover:bg-pink-700 text-white w-full py-3 rounded-lg font-medium transition">إرسال الطلب</button>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-gray-800 mb-2">ملخص الطلب:</h4>
+                        <div id="orderSummary"></div>
+                        <div class="flex justify-between items-center mt-4 pt-4 border-t">
+                            <span class="font-bold">مصاريف الشحن:</span>
+                            <span id="shippingCost" class="font-bold text-blue-600">0 جنيه</span>
+                        </div>
+                        <div class="flex justify-between items-center mt-2">
+                            <span class="text-xl font-bold">إجمالي المبلغ:</span>
+                            <span id="finalTotal" class="text-2xl font-bold text-purple-600">0 جنيه</span>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white py-3 rounded-lg font-bold hover:from-green-700 hover:to-blue-700 transition-all">
+                        <i class="fab fa-facebook-messenger ml-2"></i>
+                        إرسال الطلب عبر الماسنجر
+                    </button>
                 </form>
             </div>
         </div>
     </div>
 
+    <!-- Footer -->
+    <footer class="gradient-bg text-white py-12">
+        <div class="container mx-auto px-4 text-center">
+            <div class="flex justify-center items-center mb-6">
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/ST-REBRANDING33-EaCAOg33FDHJRqJXx6hzXGu1tl1osa.png" alt="S&T Logo" class="w-16 h-16 ml-4">
+                <h3 class="text-3xl font-bold">متجر S&T</h3>
+            </div>
+            <p class="text-lg mb-6">أجمل ملابس الأطفال بأفضل الأسعار</p>
+            <div class="flex justify-center">
+                <a href="https://www.facebook.com/talabakservice/" target="_blank" class="text-3xl hover:text-blue-300 transition-colors">
+                    <i class="fab fa-facebook"></i>
+                </a>
+            </div>
+            <p class="mt-8 text-sm opacity-75">© 2024 S&T Fashion. جميع الحقوق محفوظة</p>
+        </div>
+    </footer>
+
     <script>
-        // Loader
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                document.getElementById('loader').style.opacity = '0';
-                setTimeout(function() {
-                    document.getElementById('loader').style.display = 'none';
-                    
-                    // Animate on scroll
-                    const animateElements = document.querySelectorAll('.animate-on-scroll');
-                    animateElements.forEach(el => {
-                        el.classList.add('active');
-                    });
-                    
-                    // Product cards animation
-                    const productCards = document.querySelectorAll('.product-card');
-                    productCards.forEach((card, index) => {
-                        setTimeout(() => {
-                            card.classList.add('visible');
-                        }, index * 200);
-                    });
-                }, 500);
-            }, 2000);
-        });
+        let cart = [];
+        let shippingCost = 0;
 
-        // Language Switcher
-        const languageSwitcher = document.getElementById('languageSwitcher');
-        const languageText = document.querySelector('.language-text');
-        let isArabic = true;
-        
-        function switchLanguage() {
-            const elements = document.querySelectorAll('[data-ar], [data-en]');
-            
-            if (isArabic) {
-                document.documentElement.lang = 'en';
-                document.documentElement.dir = 'ltr';
-                document.body.classList.add('en');
-                languageText.textContent = 'العربية';
-                
-                // Update all translatable elements
-                elements.forEach(el => {
-                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-                        el.placeholder = el.getAttribute('data-en');
-                    } else {
-                        el.textContent = el.getAttribute('data-en');
-                    }
-                });
-                
-                // Update header direction
-                document.querySelector('header .container').classList.remove('flex-row-reverse');
-                document.querySelector('header nav ul').classList.remove('space-x-reverse');
-            } else {
-                document.documentElement.lang = 'ar';
-                document.documentElement.dir = 'rtl';
-                document.body.classList.remove('en');
-                languageText.textContent = 'English';
-                
-                // Update all translatable elements
-                elements.forEach(el => {
-                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-                        el.placeholder = el.getAttribute('data-ar');
-                    } else {
-                        el.textContent = el.getAttribute('data-ar');
-                    }
-                });
-                
-                // Update header direction
-                document.querySelector('header .container').classList.add('flex-row-reverse');
-                document.querySelector('header nav ul').classList.add('space-x-reverse');
-            }
-            isArabic = !isArabic;
-        }
-        
-        languageSwitcher.addEventListener('click', switchLanguage);
-
-        // Animate on scroll
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.animate-on-scroll').forEach(el => {
-            observer.observe(el);
-        });
-
-        // Product Modal
-        const productModal = document.getElementById('productModal');
-        const modalContent = document.getElementById('modalContent');
-        const closeModal = document.getElementById('closeModal');
-        const viewDetailsButtons = document.querySelectorAll('.view-details');
-        
-        // Product data
         const products = {
-            1: {
-                name: 'طقم جيب شورت اطفال - بستاشيو',
-                price: 250,
-                description: 'طقم مكون من 3 قطع: تيشرت ريب صيفي، شورت، وكاب روزالين باربي تركي. مصنوع من خامات قطنية عالية الجودة تناسب بشرة الأطفال الحساسة.',
-                details: [
-                    'تيشرت: ريب صيفي',
-                    'شورت وكاب: روزالين باربي تركي',
-                    'لون: بستاشيو',
-                    'مقاسات متوفرة:',
-                    '- من سنة إلى سنتين',
-                    '- من ثلاث سنوات إلى خمس سنوات',
-                    '- من ست سنوات إلى ثمان سنوات'
-                ],
-                image: './product1.jpg',
-                colors: ['بستاشيو'],
-                sizes: ['من سنة إلى سنتين', 'من ثلاث سنوات إلى خمس سنوات', 'من ست سنوات إلى ثمان سنوات']
+            pistachio: {
+                name: 'طقم جيب شورت - بستاشيو',
+                code: 's&t',
+                color: 'بستاشيو',
+                image: './images/product1.jpg'
             },
-            2: {
-                name: 'طقم جيب شورت اطفال - بيبي بلو',
-                price: 250,
-                description: 'طقم مكون من 3 قطع: تيشرت ريب صيفي، شورت، وكاب روزالين باربي تركي. مصنوع من خامات قطنية عالية الجودة تناسب بشرة الأطفال الحساسة.',
-                details: [
-                    'تيشرت: ريب صيفي',
-                    'شورت وكاب: روزالين باربي تركي',
-                    'لون: بيبي بلو',
-                    'مقاسات متوفرة:',
-                    '- من سنة إلى سنتين',
-                    '- من ثلاث سنوات إلى أربع سنوات',
-                    '- خمس سنوات'
-                ],
-                image: './product2.jpg',
-                colors: ['بيبي بلو'],
-                sizes: ['من سنة إلى سنتين', 'من ثلاث سنوات إلى أربع سنوات', 'خمس سنوات']
+            babyblue: {
+                name: 'طقم جيب شورت - بيبي بلو',
+                code: 's&t',
+                color: 'بيبي بلو',
+                image: './images/product2.jpg'
             }
         };
-        
-        viewDetailsButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const productId = this.getAttribute('data-product');
-                const product = products[productId];
-                
-                modalContent.innerHTML = `
-                    <div class="flex flex-col md:flex-row gap-6">
-                        <div class="md:w-1/2">
-                            <img src="${product.image}" alt="${product.name}" class="w-full rounded-lg shadow-md">
-                        </div>
-                        <div class="md:w-1/2">
-                            <h3 class="text-2xl font-bold text-gray-800 mb-2">${product.name}</h3>
-                            <p class="text-xl font-bold text-pink-600 mb-4">250 ج.م</p>
-                            
-                            <div class="mb-4">
-                                <label class="block font-bold text-gray-800 mb-2">المحافظة:</label>
-                                <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 governorate-select">
-                                    <option value="">اختر المحافظة</option>
-                                    <option value="القاهرة">القاهرة</option>
-                                    <option value="الجيزة">الجيزة</option>
-                                    <option value="الأسكندرية">الأسكندرية</option>
-                                    <option value="الدقهلية">الدقهلية</option>
-                                    <option value="البحيرة">البحيرة</option>
-                                    <option value="الغربية">الغربية</option>
-                                    <option value="المنوفية">المنوفية</option>
-                                    <option value="القليوبية">القليوبية</option>
-                                    <option value="الشرقية">الشرقية</option>
-                                    <option value="كفر الشيخ">كفر الشيخ</option>
-                                    <option value="دمياط">دمياط</option>
-                                    <option value="بني سويف">بني سويف</option>
-                                    <option value="الفيوم">الفيوم</option>
-                                    <option value="المنيا">المنيا</option>
-                                    <option value="أسيوط">أسيوط</option>
-                                    <option value="سوهاج">سوهاج</option>
-                                    <option value="قنا">قنا</option>
-                                    <option value="الأقصر">الأقصر</option>
-                                    <option value="أسوان">أسوان</option>
-                                    <option value="البحر الأحمر">البحر الأحمر</option>
-                                    <option value="الوادي الجديد">الوادي الجديد</option>
-                                    <option value="مطروح">مطروح</option>
-                                    <option value="شمال سيناء">شمال سيناء</option>
-                                    <option value="جنوب سيناء">جنوب سيناء</option>
-                                    <option value="بورسعيد">بورسعيد</option>
-                                    <option value="السويس">السويس</option>
-                                    <option value="الإسماعيلية">الإسماعيلية</option>
-                                </select>
-                            </div>
-                            
-                            <div class="mb-6">
-                                <h4 class="font-bold text-gray-800 mb-2">الوصف:</h4>
-                                <p class="text-gray-600">${product.description}</p>
-                            </div>
-                            
-                            <div class="mb-6">
-                                <h4 class="font-bold text-gray-800 mb-2">التفاصيل:</h4>
-                                <ul class="list-disc list-inside text-gray-600">
-                                    ${product.details.map(detail => `<li>${detail}</li>`).join('')}
-                                </ul>
-                            </div>
-                            
-                            <div class="mb-4">
-                                <label class="block font-bold text-gray-800 mb-2">اللون:</label>
-                                <div class="flex gap-2">
-                                    ${product.colors.map(color => `
-                                        <label class="inline-flex items-center">
-                                            <input type="radio" name="color" value="${color}" class="form-radio text-pink-600" ${product.colors[0] === color ? 'checked' : ''}>
-                                            <span class="mr-2">${color}</span>
-                                        </label>
-                                    `).join('')}
-                                </div>
-                            </div>
-                            
-                            <div class="mb-6">
-                                <label class="block font-bold text-gray-800 mb-2">المقاس:</label>
-                                <div class="grid grid-cols-2 gap-2">
-                                    ${product.sizes.map(size => `
-                                        <label class="inline-flex items-center">
-                                            <input type="radio" name="size" value="${size}" class="form-radio text-pink-600" ${product.sizes[0] === size ? 'checked' : ''}>
-                                            <span class="mr-2">${size}</span>
-                                        </label>
-                                    `).join('')}
-                                </div>
-                            </div>
-                            
-                            <div class="flex items-center mb-6">
-                                <label class="block font-bold text-gray-800 mr-4">الكمية:</label>
-                                <div class="flex items-center border border-gray-300 rounded-lg">
-                                    <button class="decrease-qty px-3 py-1 text-xl">-</button>
-                                    <input type="number" min="1" value="1" class="quantity w-12 text-center border-x border-gray-300 py-1">
-                                    <button class="increase-qty px-3 py-1 text-xl">+</button>
-                                </div>
-                            </div>
-                            
-                            <button class="add-to-cart bg-pink-600 hover:bg-pink-700 text-white px-6 py-3 rounded-full font-medium transition w-full" data-product-id="${productId}">إضافة إلى السلة</button>
-                        </div>
-                    </div>
-                `;
-                
-                // Quantity controls
-                const quantityInput = modalContent.querySelector('.quantity');
-                modalContent.querySelector('.increase-qty').addEventListener('click', () => {
-                    quantityInput.value = parseInt(quantityInput.value) + 1;
-                });
-                
-                modalContent.querySelector('.decrease-qty').addEventListener('click', () => {
-                    if (parseInt(quantityInput.value) > 1) {
-                        quantityInput.value = parseInt(quantityInput.value) - 1;
-                    }
-                });
-                
-                // Add to cart
-                modalContent.querySelector('.add-to-cart').addEventListener('click', () => {
-                    const color = modalContent.querySelector('input[name="color"]:checked').value;
-                    const size = modalContent.querySelector('input[name="size"]:checked').value;
-                    const quantity = parseInt(quantityInput.value);
-                    const governorate = modalContent.querySelector('.governorate-select').value;
-                    
-                    if (!governorate) {
-                        alert('الرجاء اختيار المحافظة');
-                        return;
-                    }
-                    
-                    addToCart(productId, product.name, 250, color, size, quantity, governorate);
-                    productModal.classList.add('hidden');
-                    
-                    // Show cart briefly
-                    cartSidebar.classList.remove('translate-x-full');
-                    setTimeout(() => {
-                        cartSidebar.classList.add('translate-x-full');
-                    }, 2000);
-                });
-                
-                productModal.classList.remove('hidden');
-            });
-        });
-        
-        closeModal.addEventListener('click', function() {
-            productModal.classList.add('hidden');
-        });
-        
-        productModal.addEventListener('click', function(e) {
-            if (e.target === productModal) {
-                productModal.classList.add('hidden');
-            }
-        });
 
-        // Cart functionality
-        const cartButton = document.getElementById('cartButton');
-        const cartSidebar = document.getElementById('cartSidebar');
-        const closeCart = document.getElementById('closeCart');
-        const cartItems = document.getElementById('cartItems');
-        const cartCount = document.getElementById('cartCount');
-        const cartTotal = document.getElementById('cartTotal');
-        const cartGrandTotal = document.getElementById('cartGrandTotal');
-        const shippingCost = document.getElementById('shippingCost');
-        const checkoutBtn = document.getElementById('checkoutBtn');
-        
-        let cart = [];
-        
-        function addToCart(productId, name, price, color, size, quantity, governorate) {
-            // Check if item already exists in cart
-            const existingItem = cart.find(item => 
-                item.productId === productId && 
-                item.color === color && 
-                item.size === size
-            );
-            
-            if (existingItem) {
-                existingItem.quantity += quantity;
-            } else {
-                cart.push({
-                    productId,
-                    name,
-                    price: 250,
-                    color,
-                    size,
-                    quantity,
-                    governorate
-                });
-            }
-            
-            updateCart();
+        function scrollToProducts() {
+            document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
         }
-        
-        function updateCart() {
-            // Update cart count
-            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
-            cartCount.textContent = totalItems;
+
+        function addToCart(productType) {
+            const sizeSelect = document.getElementById(productType === 'pistachio' ? 'size1' : 'size2');
+            const qtyInput = document.getElementById(productType === 'pistachio' ? 'qty1' : 'qty2');
             
+            if (!sizeSelect.value) {
+                alert('يرجى اختيار المقاس');
+                return;
+            }
+
+            const [size, price] = sizeSelect.value.split(',');
+            const quantity = parseInt(qtyInput.value);
+            
+            const cartItem = {
+                ...products[productType],
+                size: size,
+                price: parseInt(price),
+                quantity: quantity,
+                total: parseInt(price) * quantity
+            };
+
+            // Check if item already exists in cart
+            const existingItemIndex = cart.findIndex(item => 
+                item.code === cartItem.code && item.size === cartItem.size
+            );
+
+            if (existingItemIndex > -1) {
+                cart[existingItemIndex].quantity += quantity;
+                cart[existingItemIndex].total = cart[existingItemIndex].price * cart[existingItemIndex].quantity;
+            } else {
+                cart.push(cartItem);
+            }
+
+            updateCartUI();
+            
+            // Reset form
+            sizeSelect.value = '';
+            qtyInput.value = 1;
+            
+            // Show success message
+            showNotification('تم إضافة المنتج للسلة بنجاح!');
+        }
+
+        function updateCartUI() {
+            const cartCount = document.getElementById('cartCount');
+            const cartItems = document.getElementById('cartItems');
+            const cartTotal = document.getElementById('cartTotal');
+
+            // Update cart count
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.textContent = totalItems;
+
             // Update cart items
             if (cart.length === 0) {
-                cartItems.innerHTML = '<div class="text-center text-gray-500 py-10">سلة التسوق فارغة</div>';
-            } else {
-                cartItems.innerHTML = cart.map((item, index) => `
-                    <div class="cart-item border-b border-gray-200 py-4">
-                        <div class="flex justify-between">
-                            <div class="flex-1">
-                                <h4 class="font-medium">${item.name}</h4>
-                                <p class="text-sm text-gray-500">${item.color} - ${item.size}</p>
-                                <div class="flex items-center mt-2">
-                                    <button class="decrease-item text-gray-500 hover:text-pink-600" data-index="${index}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
-                                        </svg>
-                                    </button>
-                                    <span class="quantity mx-2">${item.quantity}</span>
-                                    <button class="increase-item text-gray-500 hover:text-pink-600" data-index="${index}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <p class="font-medium">${item.price * item.quantity} ج.م</p>
-                                <button class="remove-item text-xs text-gray-500 hover:text-pink-600 mt-2" data-index="${index}">إزالة</button>
-                            </div>
+                cartItems.innerHTML = '<p class="text-center text-gray-500 py-8">السلة فارغة</p>';
+                cartTotal.textContent = '0 جنيه';
+                return;
+            }
+
+            cartItems.innerHTML = cart.map((item, index) => `
+                <div class="flex items-center justify-between border-b pb-4 mb-4">
+                    <div class="flex items-center">
+                        <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-lg ml-4">
+                        <div>
+                            <h4 class="font-bold text-gray-800">${item.name}</h4>
+                            <p class="text-sm text-gray-600">المقاس: ${item.size}</p>
+                            <p class="text-sm text-gray-600">الكمية: ${item.quantity}</p>
                         </div>
                     </div>
-                `).join('');
-                
-                // Add event listeners to quantity controls
-                document.querySelectorAll('.increase-item').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const index = this.getAttribute('data-index');
-                        cart[index].quantity += 1;
-                        updateCart();
-                    });
-                });
-                
-                document.querySelectorAll('.decrease-item').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const index = this.getAttribute('data-index');
-                        if (cart[index].quantity > 1) {
-                            cart[index].quantity -= 1;
-                        } else {
-                            cart.splice(index, 1);
-                        }
-                        updateCart();
-                    });
-                });
-                
-                document.querySelectorAll('.remove-item').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const index = this.getAttribute('data-index');
-                        cart.splice(index, 1);
-                        updateCart();
-                    });
-                });
-            }
-            
-            // Update totals
-            const subtotal = cart.reduce((total, item) => total + (250 * item.quantity), 0);
-            const selectedGov = document.getElementById('governorate') ? document.getElementById('governorate').value : '';
-            let shipping = 0;
-            
-            if (cart.length > 0) {
-                const gov = cart[0].governorate;
-                if (['القاهرة', 'الجيزة', 'الأسكندرية'].includes(gov)) {
-                    shipping = 45 
-                } else if (['الدقهلية', 'البحيرة', 'الغربية', 'المنوفية', 'القليوبية', 'الشرقية', 'كفر الشيخ', 'دمياط'].includes(gov)) {
-                    shipping = 55 
-                } else {
-                    shipping = 65 
-                }
-            }
-            
-            const grandTotal = subtotal + shipping;
-            
-            cartTotal.textContent = subtotal + ' ج.م';
-            shippingCost.textContent = shipping + ' ج.م ' + (selectedGov ) ;
-            cartGrandTotal.textContent = grandTotal + ' ج.م';
+                    <div class="text-left">
+                        <p class="font-bold text-purple-600">${item.total} جنيه</p>
+                        <button onclick="removeFromCart(${index})" class="text-red-500 hover:text-red-700 text-sm mt-1">
+                            <i class="fas fa-trash"></i> حذف
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            // Update total
+            const total = cart.reduce((sum, item) => sum + item.total, 0);
+            cartTotal.textContent = total + ' جنيه';
         }
-        
-        cartButton.addEventListener('click', function() {
-            cartSidebar.classList.toggle('translate-x-full');
-        });
-        
-        closeCart.addEventListener('click', function() {
-            cartSidebar.classList.add('translate-x-full');
-        });
-        
-        // Checkout
-        const checkoutForm = document.getElementById('checkoutForm');
-        const closeCheckout = document.getElementById('closeCheckout');
-        const checkoutFormElement = document.querySelector('.checkout-form');
-        
-        checkoutBtn.addEventListener('click', function() {
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function openCart() {
+            document.getElementById('cartModal').classList.remove('hidden');
+        }
+
+        function closeCart() {
+            document.getElementById('cartModal').classList.add('hidden');
+        }
+
+        function proceedToCheckout() {
             if (cart.length === 0) {
-                alert('سلة التسوق فارغة');
+                alert('السلة فارغة');
                 return;
             }
             
-            // Prepare product data for checkout
-            const productNames = cart.map(item => `${item.name} (${item.color}, ${item.size})`).join('، ');
-            const totalQuantity = cart.reduce((total, item) => total + item.quantity, 0);
-            const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
-            const shipping = 30;
-            const grandTotal = subtotal + shipping;
+            closeCart();
+            updateOrderSummary();
+            document.getElementById('checkoutModal').classList.remove('hidden');
+        }
+
+        function closeCheckout() {
+            document.getElementById('checkoutModal').classList.add('hidden');
+        }
+
+        function updateOrderSummary() {
+            const orderSummary = document.getElementById('orderSummary');
+            const finalTotal = document.getElementById('finalTotal');
             
-            document.getElementById('productName').value = productNames;
-            document.getElementById('productQuantity').value = totalQuantity;
-            document.getElementById('productColor').value = cart.map(item => item.color).join('، ');
-            document.getElementById('productSize').value = cart.map(item => item.size).join('، ');
-            document.getElementById('shippingCostInput').value = shipping;
-            document.getElementById('totalAmount').value = grandTotal;
+            orderSummary.innerHTML = cart.map(item => `
+                <div class="flex justify-between items-center mb-2">
+                    <span>${item.name} (${item.size}) × ${item.quantity}</span>
+                    <span>${item.total} جنيه</span>
+                </div>
+            `).join('');
+
+            const subtotal = cart.reduce((sum, item) => sum + item.total, 0);
+            finalTotal.textContent = (subtotal + shippingCost) + ' جنيه';
+        }
+
+        function updateShipping() {
+            const governorate = document.getElementById('governorate');
+            const shippingCostElement = document.getElementById('shippingCost');
+            const finalTotal = document.getElementById('finalTotal');
             
-            cartSidebar.classList.add('translate-x-full');
-            checkoutForm.classList.remove('hidden');
-        });
-        
-        closeCheckout.addEventListener('click', function() {
-            checkoutForm.classList.add('hidden');
-        });
-        
-        checkoutForm.addEventListener('click', function(e) {
-            if (e.target === checkoutForm) {
-                checkoutForm.classList.add('hidden');
+            if (governorate.value) {
+                const [, cost] = governorate.value.split(',');
+                shippingCost = parseInt(cost);
+                shippingCostElement.textContent = shippingCost + ' جنيه';
+                
+                const subtotal = cart.reduce((sum, item) => sum + item.total, 0);
+                finalTotal.textContent = (subtotal + shippingCost) + ' جنيه';
             }
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-20 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-slide-up';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Event listeners
+        document.getElementById('cartBtn').addEventListener('click', openCart);
+
+        document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('customerName').value;
+            const phone = document.getElementById('customerPhone').value;
+            const governorate = document.getElementById('governorate');
+            const address = document.getElementById('customerAddress').value;
+            
+            const [govName] = governorate.options[governorate.selectedIndex].text.split(' - ');
+            
+            // Create order message
+            let message = 'طلب جديد من متجر S&T:\n\n';
+            
+            cart.forEach(item => {
+                message += `اسم المنتج: ${item.name}\n`;
+                message += `الكود: ${item.code}\n`;
+                message += `العدد: ${item.quantity}\n`;
+                message += `اللون: ${item.color}\n`;
+                message += `المقاس: ${item.size}\n`;
+                message += `السعر: ${item.total} جنيه\n\n`;
+            });
+            
+            const subtotal = cart.reduce((sum, item) => sum + item.total, 0);
+            message += `مصاريف الشحن: ${shippingCost} جنيه\n`;
+            message += `إجمالي المبلغ: ${subtotal + shippingCost} جنيه\n\n`;
+            message += `الاسم: ${name}\n`;
+            message += `رقم الموبيل: ${phone}\n`;
+            message += `المحافظة: ${govName}\n`;
+            message += `العنوان: ${address}`;
+            
+            // Send to Facebook Messenger
+            const encodedMessage = encodeURIComponent(message);
+            const messengerUrl = `https://m.me/talabakservice?text=${encodedMessage}`;
+            
+            window.open(messengerUrl, '_blank');
+            
+            // Clear cart and close modal
+            cart = [];
+            updateCartUI();
+            closeCheckout();
+            showNotification('تم إرسال طلبك بنجاح! سيتم التواصل معك قريباً');
         });
-        
-        checkoutFormElement.addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    // Get form data
-    const formData = new FormData(this);
-    const data = Object.fromEntries(formData.entries());
-    
-    // Prepare Messenger message
-    const message = `طلب جديد من Little Fashion\n\n` +
-                    `الاسم: ${data.name}\n` +
-                    `رقم الهاتف: ${data.phone}\n` +
-                    `المحافظة: ${data.governorate}\n` +
-                    `العنوان: ${data.address}\n\n` +
-                    `تفاصيل الطلب:\n` +
-                    `المنتج: ${data.productName}\n` +
-                    `العدد: ${data.productQuantity}\n` +
-                    `اللون: ${data.productColor}\n` +
-                    `المقاس: ${data.productSize}\n` +
-                    `مصاريف الشحن: ${data.shippingCost} ج.م\n` +
-                    `إجمالي المبلغ: ${data.totalAmount} ج.م`;
-    
-    // Encode the message for URL
-    const encodedMessage = encodeURIComponent(message);
-    
-    // Open Messenger chat with the page
-    window.open(`https://m.me/talabakservice?text=${encodedMessage}`, '_blank');
-    
-    // Reset cart and close forms
-    cart = [];
-    updateCart();
-    checkoutForm.classList.add('hidden');
-    this.reset();
-    
-    // Show success message
-    alert('تم إرسال طلبك بنجاح! سوف نتصل بك قريبًا لتأكيد التفاصيل.');
-});
+
+        // Initialize
+        updateCartUI();
     </script>
 </body>
 </html>
