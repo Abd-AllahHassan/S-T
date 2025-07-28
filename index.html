@@ -70,6 +70,27 @@
         .hero-image:hover {
             transform: scale(1.05);
         }
+
+        /* Mobile responsive fixes */
+        @media (max-width: 768px) {
+            .modal .bg-white {
+                margin: 1rem;
+                max-height: calc(100vh - 2rem);
+            }
+            
+            .checkout-form {
+                padding: 1rem;
+            }
+            
+            .checkout-button {
+                position: sticky;
+                bottom: 0;
+                background: white;
+                padding: 1rem;
+                border-top: 1px solid #e5e7eb;
+                margin: -1rem -1rem 0 -1rem;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -162,15 +183,15 @@
                             <div class="space-y-2">
                                 <div class="flex justify-between items-center">
                                     <span>من سنة إلى سنتين</span>
-                                    <span class="text-green-600 font-bold">150 جنيه</span>
+                                    <span class="text-green-600 font-bold">250 جنيه</span>
                                 </div>
                                 <div class="flex justify-between items-center">
                                     <span>من 3 سنوات إلى 5 سنين</span>
-                                    <span class="text-green-600 font-bold">170 جنيه</span>
+                                    <span class="text-green-600 font-bold">250 جنيه</span>
                                 </div>
                                 <div class="flex justify-between items-center">
                                     <span>من 6 سنوات إلى 8 سنوات</span>
-                                    <span class="text-green-600 font-bold">190 جنيه</span>
+                                    <span class="text-green-600 font-bold">250 جنيه</span>
                                 </div>
                             </div>
                         </div>
@@ -368,53 +389,58 @@
                     </div>
                 </div>
                 
-                <form id="checkoutForm" class="p-6 space-y-4">
-                    <div class="grid md:grid-cols-2 gap-4">
+                <div class="checkout-form">
+                    <form id="checkoutForm" class="p-6 space-y-4">
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-gray-700 font-bold mb-2">الاسم</label>
+                                <input type="text" id="customerName" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 font-bold mb-2">رقم الموبيل</label>
+                                <input type="tel" id="customerPhone" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                            </div>
+                        </div>
+                        
                         <div>
-                            <label class="block text-gray-700 font-bold mb-2">الاسم</label>
-                            <input type="text" id="customerName" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                            <label class="block text-gray-700 font-bold mb-2">المحافظة</label>
+                            <select id="governorate" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500" onchange="updateShipping()">
+                                <option value="">اختر المحافظة</option>
+                                <option value="cairo,45">القاهرة - 45 جنيه</option>
+                                <option value="giza,45">الجيزة - 45 جنيه</option>
+                                <option value="alexandria,45">الإسكندرية - 45 جنيه</option>
+                                <option value="delta,55">محافظات الدلتا - 55 جنيه</option>
+                                <option value="upper,65">الصعيد ومرسى مطروح - 65 جنيه</option>
+                            </select>
                         </div>
+                        
                         <div>
-                            <label class="block text-gray-700 font-bold mb-2">رقم الموبيل</label>
-                            <input type="tel" id="customerPhone" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                            <label class="block text-gray-700 font-bold mb-2">العنوان</label>
+                            <textarea id="customerAddress" required rows="3" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"></textarea>
                         </div>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-gray-700 font-bold mb-2">المحافظة</label>
-                        <select id="governorate" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500" onchange="updateShipping()">
-                            <option value="">اختر المحافظة</option>
-                            <option value="cairo,45">القاهرة - 45 جنيه</option>
-                            <option value="giza,45">الجيزة - 45 جنيه</option>
-                            <option value="alexandria,45">الإسكندرية - 45 جنيه</option>
-                            <option value="delta,55">محافظات الدلتا - 55 جنيه</option>
-                            <option value="upper,65">الصعيد ومرسى مطروح - 65 جنيه</option>
-                        </select>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-gray-700 font-bold mb-2">العنوان</label>
-                        <textarea id="customerAddress" required rows="3" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"></textarea>
-                    </div>
-                    
-                    <div class="bg-gray-50 p-4 rounded-lg">
-                        <h4 class="font-bold text-gray-800 mb-2">ملخص الطلب:</h4>
-                        <div id="orderSummary"></div>
-                        <div class="flex justify-between items-center mt-4 pt-4 border-t">
-                            <span class="font-bold">مصاريف الشحن:</span>
-                            <span id="shippingCost" class="font-bold text-blue-600">0 جنيه</span>
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-bold text-gray-800 mb-2">ملخص الطلب:</h4>
+                            <div id="orderSummary"></div>
+                            <div class="flex justify-between items-center mt-4 pt-4 border-t">
+                                <span class="font-bold">مصاريف الشحن:</span>
+                                <span id="shippingCost" class="font-bold text-blue-600">0 جنيه</span>
+                            </div>
+                            <div class="flex justify-between items-center mt-2">
+                                <span class="text-xl font-bold">إجمالي المبلغ:</span>
+                                <span id="finalTotal" class="text-2xl font-bold text-purple-600">0 جنيه</span>
+                            </div>
                         </div>
-                        <div class="flex justify-between items-center mt-2">
-                            <span class="text-xl font-bold">إجمالي المبلغ:</span>
-                            <span id="finalTotal" class="text-2xl font-bold text-purple-600">0 جنيه</span>
-                        </div>
-                    </div>
-                    
-                    <button type="submit" class="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white py-3 rounded-lg font-bold hover:from-green-700 hover:to-blue-700 transition-all">
+                    </form>
+                </div>
+                
+                <!-- Sticky button for mobile -->
+                <div class="checkout-button">
+                    <button type="submit" form="checkoutForm" class="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white py-4 rounded-lg font-bold hover:from-green-700 hover:to-blue-700 transition-all text-lg">
                         <i class="fab fa-facebook-messenger ml-2"></i>
                         إرسال الطلب عبر الماسنجر
                     </button>
-                </form>
+                </div>
             </div>
         </div>
     </div>
