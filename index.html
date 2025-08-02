@@ -6,6 +6,8 @@
     <title>متجر S&T - ملابس أطفال</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="icon" href="./images/logo.png" type="image/png">
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
         
@@ -71,6 +73,19 @@
             transform: scale(1.05);
         }
 
+        /* Force number input arrows to show on all devices */
+        input[type="number"] {
+            -webkit-appearance: textfield;
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: auto;
+            margin: 0;
+        }
+
         /* Mobile responsive fixes */
         @media (max-width: 768px) {
             .modal .bg-white {
@@ -89,6 +104,11 @@
                 padding: 1rem;
                 border-top: 1px solid #e5e7eb;
                 margin: -1rem -1rem 0 -1rem;
+            }
+
+            /* Ensure arrows show on mobile too */
+            input[type="number"] {
+                -webkit-appearance: auto;
             }
         }
     </style>
@@ -178,30 +198,17 @@
                         <h3 class="text-2xl font-bold mb-2 text-gray-800">طقم جيب شورت - بستاشيو</h3>
                         <p class="text-gray-600 mb-4">طقم أطفال 3 قطع - تيشرت ريب صيفي، شورت وكاب روزالين باربي تركي</p>
                         
-                        <div class="mb-4">
-                            <h4 class="font-bold text-gray-700 mb-2">المقاسات المتاحة:</h4>
-                            <div class="space-y-2">
-                                <div class="flex justify-between items-center">
-                                    <span>1-2</span>
-                                    <span class="text-blue-600 font-bold">250 جنيه</span>
-                                </div>
-                                <div class="flex justify-between items-center">
-                                    <span>من 3 - 4 سنين</span>
-                                    <span class="text-blue-600 font-bold">250 جنيه</span>
-                                </div>
-                                <div class="flex justify-between items-center">
-                                    <span>5 سنوات</span>
-                                    <span class="text-blue-600 font-bold">250 جنيه</span>
-                                </div>
-                            </div>
+                        <!-- Price -->
+                        <div class="mb-6">
+                            <span class="text-3xl font-bold text-green-600">250 جنيه</span>
                         </div>
                         
                         <div class="space-y-3">
                             <select id="size1" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
                                 <option value="">اختر المقاس</option>
-                                <option value="1-2,250">1-2 - 250 جنيه</option>
-                                <option value="3-4,250">من 3 - 4 سنين - 250 جنيه</option>
-                                <option value="5,250">5 سنوات - 250 جنيه</option>
+                                <option value="1-2,250">1-2</option>
+                                <option value="3-5,250">من 3 - 5 سنين</option>
+                                <option value="6-8,250">من 6 - 8 سنوات</option>
                             </select>
                             
                             <div class="flex space-x-3 space-x-reverse">
@@ -227,30 +234,17 @@
                         <h3 class="text-2xl font-bold mb-2 text-gray-800">طقم جيب شورت - بيبي بلو</h3>
                         <p class="text-gray-600 mb-4">طقم أطفال 3 قطع - تيشرت ريب صيفي، شورت وكاب روزالين باربي تركي</p>
                         
-                        <div class="mb-4">
-                            <h4 class="font-bold text-gray-700 mb-2">المقاسات المتاحة:</h4>
-                            <div class="space-y-2">
-                                <div class="flex justify-between items-center">
-                                    <span>1-2</span>
-                                    <span class="text-blue-600 font-bold">250 جنيه</span>
-                                </div>
-                                <div class="flex justify-between items-center">
-                                    <span>من 3 - 4 سنين</span>
-                                    <span class="text-blue-600 font-bold">250 جنيه</span>
-                                </div>
-                                <div class="flex justify-between items-center">
-                                    <span>5 سنوات</span>
-                                    <span class="text-blue-600 font-bold">250 جنيه</span>
-                                </div>
-                            </div>
+                        <!-- Price -->
+                        <div class="mb-6">
+                            <span class="text-3xl font-bold text-blue-600">250 جنيه</span>
                         </div>
                         
                         <div class="space-y-3">
                             <select id="size2" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
                                 <option value="">اختر المقاس</option>
-                                <option value="1-2,250">1-2 - 250 جنيه</option>
-                                <option value="3-4,250">من 3 - 4 سنين - 250 جنيه</option>
-                                <option value="5,250">5 سنوات - 250 جنيه</option>
+                                <option value="1-2,250">1-2</option>
+                                <option value="3-4,250">من 3 - 4 سنين</option>
+                                <option value="5,250">5 سنوات</option>
                             </select>
                             
                             <div class="flex space-x-3 space-x-reverse">
@@ -467,7 +461,7 @@
                     <i class="fab fa-facebook"></i>
                 </a>
             </div>
-            <p class="mt-8 text-sm opacity-75">© 2024 S&T Fashion. جميع الحقوق محفوظة</p>
+            <p class="mt-8 text-sm opacity-75">© 2025 S&T Fashion. جميع الحقوق محفوظة</p>
         </div>
     </footer>
 
@@ -505,6 +499,13 @@
 
             const [size, price] = sizeSelect.value.split(',');
             const quantity = parseInt(qtyInput.value);
+            
+            // Add validation for quantity
+            if (isNaN(quantity) || quantity <= 0) {
+                alert('يرجى إدخال كمية صحيحة');
+                qtyInput.value = 1; // Reset to default value
+                return;
+            }
             
             const cartItem = {
                 ...products[productType],
